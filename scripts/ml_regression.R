@@ -4,7 +4,7 @@ library(car)
 
 #Importing the data
 file_path<-"./raw/sold_units.csv"
-sold_units<-read.csv(file_path)
+sold_units<-read_csv(file_path)
 
 #Renaming the columns
 my_names<-c("year","num_units","exchange","itcrb")
