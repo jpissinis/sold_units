@@ -46,7 +46,7 @@ plot (sold_units_subsets, scale = "adjr2")
 plot (sold_units_subsets, scale = "r2")
 which.max(summary(sold_units_subsets)$adjr2)
 coef(sold_units_subsets, which.max(summary(sold_units_subsets)$adjr2))
-names(coef(sold_units_subsets, which.max(summary(sold_units_subsets)$adjr2)))
+
 #building the best two models
 sold_units_model_best3<-lm(sold_units[,c("num_units","itcrb","exchange",
                                          "inflation")])
