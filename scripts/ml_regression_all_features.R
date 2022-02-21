@@ -4,7 +4,7 @@ library(car)
 library(glmnet)
 library(leaps)
 #Importing the data
-file_path<-"./raw/sold_units_all_features.csv"
+file_path<-"./raw/sold_units_more_features.csv"
 sold_units<-read_csv(file_path)
 
 #Renaming the columns
