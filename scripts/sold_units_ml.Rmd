@@ -1,0 +1,77 @@
+---
+title: "sold_units_ml"
+author: "Jerónimo Pissinis"
+date: "2/21/2022"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r , echo=TRUE}
+#Importing the packages
+library(readr)
+library(car)
+library(glmnet)
+library(leaps)
+#Importing the data
+file_path<-"./raw/sold_units_complete.csv"
+sold_units<-read_csv(file_path)
+
+
+#Renaming the columns
+my_names<-c("year","num_units","itcrb","import_restriction",
+            "brecha_cambiaria","inflation","reserves", "PIB",
+            "rango_devaluación_interanual","PIB/reserves")
+names(sold_units)<-my_names
+
+#Building the model
+sold_units_model<-lm(sold_units[,-1])
+summary(sold_units_model)
+
+
+#Pairwise plots of the features
+pairs(sold_units[,-1])
+
+#Analyzing the residuals
+plot(fitted(sold_units_model),residuals(sold_units_model))
+qqnorm(residuals(sold_units_model))
+
+#Looking for outliers and high leverage points
+plot(fitted(sold_units_model),residuals(sold_units_model))
+plot(fitted(sold_units_model),rstandard(sold_units_model))
+plot(hatvalues(sold_units_model))
+abline(h=length(coef(sold_units_model))/nrow(sold_units)*2, col = "red",lty = 2)
+plot(rstandard((sold_units_model)))
+
+#Looking for colinearity
+cor(sold_units[,c("itcrb","import_restriction",
+                  "brecha_cambiaria","inflation","reserves", "PIB",
+                  "rango_devaluación_interanual","PIB/reserves")])
+vif(sold_units_model)
+eigen(cor(sold_units[,c("itcrb","import_restriction",
+                        "brecha_cambiaria","inflation","reserves", "PIB",
+                        "rango_devaluación_interanual","PIB/reserves")]))
+
+#feature selection
+#Applying best subset selection
+sold_units_subsets<-regsubsets(sold_units[,-1]$num_units~.,sold_units[,-1])
+summary(sold_units_subsets)
+plot(summary(sold_units_subsets)$adjr2)
+plot (sold_units_subsets, scale = "adjr2")
+plot (sold_units_subsets, scale = "r2")
+which.max(summary(sold_units_subsets)$adjr2)
+coef(sold_units_subsets, which.max(summary(sold_units_subsets)$adjr2))
+
+
+#building the new model
+sold_units_complete<-lm(sold_units[,c("num_units","itcrb","brecha_cambiaria",
+                                      "inflation","PIB/reserves","reserves",
+                                      "import_restriction")])
+summary(sold_units_complete)
+summary(sold_units_model)
+
+```

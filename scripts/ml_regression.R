@@ -25,7 +25,7 @@ qqnorm(residuals(sold_units_model))
 plot(fitted(sold_units_model),residuals(sold_units_model))
 plot(fitted(sold_units_model),rstandard(sold_units_model))
 plot(hatvalues(sold_units_model))
-abline(h=3/nrow(sold_units)*2, col = "red",lty = 2)
+abline(h=length(coef(sold_units_model))/nrow(sold_units)*2, col = "red",lty = 2)
 plot(rstandard((sold_units_model)))
 
 #Looking for colinearity
