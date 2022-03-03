@@ -44,8 +44,8 @@ names(sold_units)<-my_names
 
 Building the model
 ```{r , echo=TRUE}
-sold_units_selected<-lm(sold_units)
-summary(sold_units_selected)
+sold_units_model<-lm(sold_units)
+summary(sold_units_model)
 ```
 
 
@@ -56,18 +56,21 @@ pairs(sold_units)
 
 Analyzing the residuals
 ```{r , echo=TRUE}
-plot(fitted(sold_units_selected),residuals(sold_units_selected))
-qqnorm(residuals(sold_units_selected))
+plot(fitted(sold_units_model),residuals(sold_units_model))
+qqnorm(residuals(sold_units_model))
 ```
 
 
 Looking for outliers and high leverage points
 ```{r , echo=TRUE}
-plot(fitted(sold_units_selected),rstandard(sold_units_selected))
-plot(hatvalues(sold_units_selected))
-abline(h=length(coef(sold_units_selected))/nrow(sold_units)*2, 
+plot(fitted(sold_units_model),rstandard(sold_units_model))
+plot(hatvalues(sold_units_model))
+abline(h=length(coef(sold_units_model))/nrow(sold_units)*2, 
        col = "red",lty = 2)
-plot(rstandard((sold_units_selected)))
+high_leverage_points<-hatvalues(sold_units_model)>
+  (length(coef(sold_units_model))/nrow(sold_units)*2)
+plot(rstandard(sold_units_model), 
+     col = factor(high_leverage_points))
 ```
 
 
@@ -79,7 +82,7 @@ cor(sold_units[,-1])
 
 Variance inflation factors
 ```{r , echo=TRUE}
-vif(sold_units_selected)
+vif(sold_units_model)
 ```
 
 Eigenvalues of the correlation matrix
@@ -147,4 +150,42 @@ sold_units_selected_rm<-
 summary(sold_units_selected_rm)
 summary(sold_units_selected)
 vif(sold_units_selected_rm)
+```
+
+Applying LASSO
+```{r , echo=TRUE}
+sold_units_lasso<-glmnet(as.matrix(sold_units[,-1]),
+                         as.matrix(sold_units[,1]),alpha=1)
+sold_units_lasso
+#selecting lambda using cross-validation
+cv_sold_units_lasso<- cv.glmnet(as.matrix(sold_units[,-1]),
+                                as.matrix(sold_units[,1]),
+                                type.measure = c("mae"),
+                                alpha=1,nfolds = 5)
+cv_sold_units_lasso
+plot(cv_sold_units_lasso)
+best_lambda <- cv_sold_units_lasso$lambda.min
+best_lambda
+sold_units_lasso_best<-glmnet(as.matrix(sold_units[,-1]), 
+                              as.matrix(sold_units[,1]), alpha = 1,
+                              lambda = best_lambda)
+sold_units_lasso_best
+coef(sold_units_lasso_best)
+```
+```{r , echo=TRUE}
+#testing the model selected with best subset selection using cross-validation
+cv_sold_units_selected<-cv.glmnet(as.matrix(sold_units[names(sold_units)%in%
+                                              selected_coef]),
+                                as.matrix(sold_units[,1]),
+                                type.measure = c("mae"),
+                                alpha=0,grouped = TRUE)
+cv_sold_units_selected
+plot(cv_sold_units_selected)
+best_lambda <- cv_sold_units_lasso$lambda.min
+best_lambda
+sold_units_lasso_best<-glmnet(as.matrix(sold_units[,-1]), 
+                              as.matrix(sold_units[,1]), alpha = 1,
+                              lambda = best_lambda)
+sold_units_lasso_best
+coef(sold_units_lasso_best)
 ```
