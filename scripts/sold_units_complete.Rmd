@@ -94,16 +94,15 @@ sold_units_subsets<-regsubsets(sold_units$num_units~.,sold_units,nvmax = 12)
 summary(sold_units_subsets)
 plot(summary(sold_units_subsets)$adjr2)
 plot (sold_units_subsets, scale = "adjr2")
-which.max(summary(sold_units_subsets)$adjr2)
-coef(sold_units_subsets, which.max(summary(sold_units_subsets)$adjr2))
+best_adjr2<-which.max(summary(sold_units_subsets)$adjr2)
+selected_coef<-names(coef(sold_units_subsets, best_adjr2))
 ```
 
 Building the selected model
 ```{r , echo=TRUE}
 sold_units_selected<-
   lm(sold_units[,names(sold_units)%in%
-    c("num_units",names(coef(sold_units_subsets,
-                             which.max(summary(sold_units_subsets)$adjr2))))])
+    c("num_units",selected_coef)])
 summary(sold_units_selected)
 ```
 
@@ -120,17 +119,32 @@ plot(fitted(sold_units_selected),rstandard(sold_units_selected))
 plot(hatvalues(sold_units_selected))
 abline(h=length(coef(sold_units_selected))/nrow(sold_units)*2, 
        col = "red",lty = 2)
-plot(rstandard((sold_units_selected)))
+high_leverage_points<-hatvalues(sold_units_selected)>
+  (length(coef(sold_units_selected))/nrow(sold_units)*2)
+plot(rstandard(sold_units_selected), 
+     col = factor(standard_res_high_lev$high_leverage_points))
 ```
 
 Looking for colinearity
 Correlation matrix and its eigen values
 ```{r , echo=TRUE}
-cor(sold_units[,names(sold_units)%in%names(coef(sold_units_selected))])
-eigen(cor(sold_units[,names(sold_units)%in%names(coef(sold_units_selected))]))$values
+selected_coef_cor<-cor(sold_units[,names(sold_units)%in%selected_coef])
+selected_coef_cor
+eigen(selected_coef_cor)$values
 ```
 
 Variance inflation factors
 ```{r , echo=TRUE}
 vif(sold_units_selected)
+```
+
+Removing the high leverage outlier
+```{r , echo=TRUE}
+sold_units_selected_rm<-
+  lm(sold_units[!(high_leverage_points &
+                    (rstandard(sold_units_selected)>2)),
+                  names(sold_units)%in% c("num_units",selected_coef)])
+summary(sold_units_selected_rm)
+summary(sold_units_selected)
+vif(sold_units_selected_rm)
 ```
