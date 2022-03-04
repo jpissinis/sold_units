@@ -126,7 +126,7 @@ abline(h=length(coef(sold_units_subset))/nrow(sold_units)*2,
 high_leverage_points<-hatvalues(sold_units_subset)>
   (length(coef(sold_units_subset))/nrow(sold_units)*2)
 plot(rstandard(sold_units_subset), 
-     col = factor(standard_res_high_lev$high_leverage_points))
+     col = factor(high_leverage_points))
 ```
 
 Looking for colinearity
@@ -147,7 +147,7 @@ Removing the high leverage outlier
 sold_units_subset_rm<-
   lm(sold_units[!(high_leverage_points &
                     (rstandard(sold_units_subset)>2)),
-                  names(sold_units)%in% c("num_units",selected_coef)], 
+                  names(sold_units)%in% c("num_units",subset_coef)], 
      y = TRUE, x = TRUE)
 summary(sold_units_subset_rm)
 summary(sold_units_subset)
