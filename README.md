@@ -19,7 +19,7 @@ PIB_over_reserves:
 exchange_difference:
 industry_trade_balance_difference:
 
-###### Methodology and Results
+### Methodology and Results
 To avoid structural colinearity the variables PIB, reserves and PIB_over_reserves are centered.
 The normality of the residuals is analyzed using normal quantile quantile plots and the homoscedasticity is checked using plots of the residuals against the fitted values.
 Outliers are detected using plots of the standarized residuals against the fitted values. The leverage of the observations is also checked to look particularly for high-leverage outliers.
@@ -27,9 +27,11 @@ To investigate multicolinearity pairwise plots of the variables, the correlation
 In the final analysis first a model including all the predictors is built. It suffers as expected of great multicolinearity.
 To reduce the complexity of the model and to do feature selection two methods are employed: 
  - Best subset selection is used although it is a computationally expensive technique since it is an exhaustive comparison of all the possible combinations. In the current model the number of observations is small as well as the number of features making it affordable. Adjusted R2 is the criteria used to select the subset of predictors.
-
-
-# Challenges
+ - LASSO regularization is employed. The best value for lambda is chosen using cross-validation based on the mean squared error.
+The model selected using best subset selection is tested using cross-validation.
+The MSE and RMSE are used to compare the models. The results are very similar for both of them with the RMSE being around 50000 sold units.
+ 
+### Challenges
 Multicolinearity of the factors
 Small sample
 Removing the outlier in the model using best subset selection changes the coefficients but it doesn't change much the fit of the model.
