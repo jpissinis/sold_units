@@ -156,7 +156,7 @@ vif(sold_units_subset_rm)
 
 Testing the model selected with best subset selection using cross-validation
 ```{r , echo=TRUE}
-cv_sold_units_subset<-cv.lm(sold_units_subset, k=5)
+cv_sold_units_subset<-cv.lm(sold_units_subset, k=5,)
 cv_sold_units_subset
 ```
 
