@@ -38,7 +38,7 @@ sold_units[,10]<-scale(sold_units[,10],scale=FALSE)
 my_names<-c("num_units", "itcrb", "imported_cars", "semiconductor_crisis",
             "devaluacion_interanual", "inflation", "import_restriction",
             "PIB", "reserves", "PIB_over_reserves", "exchange_difference",
-            "industry_trade_balance_diference")
+            "industry_trade_balance_difference")
 names(sold_units)<-my_names
 ```
 
@@ -179,6 +179,7 @@ sold_units_lasso_best<-glmnet(as.matrix(sold_units[,-1]),
 sold_units_lasso_best
 coef(sold_units_lasso_best)
 ```
+
 Comparing the MSE of the best subset and LASSO models
 ```{r , echo=TRUE}
 mse_lasso<-min(cv_sold_units_lasso$cvm)
@@ -189,14 +190,13 @@ sqrt(mse_lasso)
 sqrt(mse_subset)
 ```
 
-
-
+Building a model determined by the user
 ```{r , echo=TRUE}
 user_predictors<-c("num_units", "itcrb",
                    "devaluacion_interanual", 
                    "inflation", "import_restriction",
                    "PIB_over_reserves", "exchange_difference",
-                   "industry_trade_balance_diference")
+                   "industry_trade_balance_difference")
 sold_units_user<-sold_units[,names(sold_units)%in%user_predictors]
 str(sold_units_user)
 sold_units_user_model<-lm(sold_units_user)
@@ -212,7 +212,7 @@ sold_units_user_subset<-lm(sold_units[,names(sold_units)%in%
                                         c("num_units", "itcrb","inflation",
                                           "PIB_over_reserves",
                                           "exchange_difference",
-                                          "industry_trade_balance_diference")])
+                                          "industry_trade_balance_difference")])
 summary(sold_units_user_subset)
 vif(sold_units_user_subset)
 ```
