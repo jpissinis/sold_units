@@ -91,6 +91,12 @@ Eigenvalues of the correlation matrix
 eigen(cor(sold_units[,-1]))$values
 ```
 
+Testing the model using cross-validation
+```{r , echo=TRUE}
+cv_sold_units<-cv.lm(sold_units_model, k=5,)
+cv_sold_units
+```
+
 # Feature selection
 Applying best subset selection
 ```{r , echo=TRUE}
