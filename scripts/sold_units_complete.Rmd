@@ -29,7 +29,7 @@ sold_units<-read_csv(file_path)
 #Dropping the year column.
 sold_units<-sold_units[,-1]
 
-#Centering the variables to reduce structural multicolinearity
+#Centering the variables to reduce structural multicollinearity
 sold_units[,8]<-scale(sold_units[,8],scale=FALSE)
 sold_units[,9]<-scale(sold_units[,9],scale=FALSE)
 sold_units[,10]<-scale(sold_units[,10],scale=FALSE)
@@ -75,7 +75,7 @@ plot(rstandard(sold_units_model),
 ```
 
 
-Looking for colinearity
+Looking for collinearity
 Correlation matrix
 ```{r , echo=TRUE}
 cor(sold_units[,-1])
@@ -135,7 +135,7 @@ plot(rstandard(sold_units_subset),
      col = factor(high_leverage_points))
 ```
 
-Looking for colinearity
+Looking for collinearity
 Correlation matrix and its eigen values
 ```{r , echo=TRUE}
 subset_coef_cor<-cor(sold_units[,names(sold_units)%in%subset_coef])
