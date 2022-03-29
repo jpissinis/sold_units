@@ -6,17 +6,17 @@ Based on those findings more variables were incorporated in the model and some i
 The final version of the complete model can be found in Rmarkdown form in ./scripts/sold_units_complete.Rmd which was used to do the analysis and present it to the user.
 
 ### Features description:
-num_units:
-itcrb:
-imported_cars:
-semiconductor_crisis: 
-devaluacion_interanual:
-inflation: 
-import_restriction:
-PIB:
-reserves:
-PIB_over_reserves:
-exchange_difference:
+num_units: number of cars sold in a year.
+itcrb: real exchange rate between Argentina and USA in average through time. 
+imported_cars: dollars in Millions destined to the car and auto parts imports
+semiconductor_crisis: worldwide semiconductor shortage (dichotomous variable)
+devaluacion_interanual: Annual Devaluation Rate of the Local Currency (ARS) from January to December.
+inflation: annual Inflation rate from Jan to December (note: during 6 years the rate hasn't been taken from the Governmental Agency due to the lack of robustness and intervention of the Agency.
+import_restriction: restrictions imposed by the Government in order to import goods (dichotomous variable)
+PIB: gross domestic product of Argentina in Millions of dollars in current prices.
+reserves: national reserves.
+PIB_over_reserves: calculated using PIB/reserves
+exchange_difference: 
 industry_trade_balance_difference:
 
 ### Methodology and Results
