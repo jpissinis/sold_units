@@ -15,9 +15,9 @@ inflation: annual Inflation rate from Jan to December (note: during 6 years the 
 import_restriction: restrictions imposed by the Government in order to import goods (dichotomous variable)
 PIB: gross domestic product of Argentina in Millions of dollars in current prices.
 reserves: national reserves.
-PIB_over_reserves: calculated using PIB/reserves
-exchange_difference: 
-industry_trade_balance_difference:
+PIB_over_reserves: calculated using PIB/reserves.
+exchange_difference: difference between the official exchange rate between US Dollar and Argentinean Peso (determined by the government) and the real exchange rate.
+industry_trade_balance_difference: 
 
 ### Methodology and Results
 To avoid structural colinearity the variables PIB, reserves and PIB_over_reserves are centered.
